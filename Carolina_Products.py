@@ -4,34 +4,32 @@ from module_package import *
 
 @retry
 def get_zenrowa(url, params=None):
-    api_list = ['0ed1b4d860a82d93b51edce0fe8d32c949d7cbc7', '6f269d15ae0a60430ed5b5043197076de785fc91']
-    for api_key in api_list:
-        client = ZenRowsClient(api_key)
-        r = client.get(url, params = params)
-        if r.status_code == 200:
-            soup = BeautifulSoup(r.text, 'html.parser')
-            return soup
-        elif 499 >= r.status_code >= 400:
-            print(f'client error response, status code {r.status_code} \nrefer: {r.url}')
-            status_log(r)
-        elif 599 >= r.status_code >= 500:
-            print(f'server error response, status code {r.status_code} \nrefer: {r.url}')
-            count = 1
-            while count != 10:
-                print('while', count)
-                client = ZenRowsClient("0ed1b4d860a82d93b51edce0fe8d32c949d7cbc7")
-                r = client.get(url, params=params)
-                print('status_code: ', r.status_code)
-                if r.status_code == 200:
-                    soup = BeautifulSoup(r.text, 'html.parser')
-                    return soup
-                else:
-                    print('retry ', count)
-                    count += 1
-                    time.sleep(count * 2)
-        else:
-            status_log(r)
-            return None
+    client = ZenRowsClient("b34905fe71355edb294fe365c5f4c1898db1a954")
+    r = client.get(url, params = params)
+    if r.status_code == 200:
+        soup = BeautifulSoup(r.text, 'html.parser')
+        return soup
+    elif 499 >= r.status_code >= 400:
+        print(f'client error response, status code {r.status_code} \nrefer: {r.url}')
+        status_log(r)
+    elif 599 >= r.status_code >= 500:
+        print(f'server error response, status code {r.status_code} \nrefer: {r.url}')
+        count = 1
+        while count != 10:
+            print('while', count)
+            client = ZenRowsClient("0ed1b4d860a82d93b51edce0fe8d32c949d7cbc7")
+            r = client.get(url, params=params)
+            print('status_code: ', r.status_code)
+            if r.status_code == 200:
+                soup = BeautifulSoup(r.text, 'html.parser')
+                return soup
+            else:
+                print('retry ', count)
+                count += 1
+                time.sleep(count * 2)
+    else:
+        status_log(r)
+        return None
 
 
 if __name__ == '__main__':
